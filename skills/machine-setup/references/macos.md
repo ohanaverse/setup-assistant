@@ -2,6 +2,8 @@
 
 Load when the conversation is about a Mac. All commands follow the action policy in `SKILL.md`: shown, offered, approved. Commands marked **user runs** need `sudo`, a password, or a GUI.
 
+Only the package managers and OS families described here are covered; anything else is a **gap**: state it, never guess commands, and use the gap flow in `SKILL.md`.
+
 ## Detecting the machine
 
 Read-only; offer as one batched list.

@@ -8,7 +8,7 @@ Load for flow 4. Scope: installing and configuring tools. Everything here follow
 2. **Gather.** Ask for the smallest set of targeted read-only diagnostics that discriminate between the likely causes below. One batched shown list.
 3. **Isolate.** From the outputs, name the single most likely cause and what evidence supports it. If the evidence does not discriminate, say so and ask for one more targeted check; do not state a guess as fact.
 4. **Fix.** Propose the exact command or edit, what it changes, and how to undo it. Apply only on approval.
-5. **Record.** Show the `symptom → cause → fix` entry together with the fix list. Apply it to `Fixes and quirks` in that OS's setup document (default `~/setup-guides/<os>.md`, or the directory the user named; create the section if absent, otherwise merge) once the user confirms the fix worked. That confirmation is the trigger; no second prompt. Note the machine if the fix is machine-specific.
+5. **Record.** Show the `symptom → cause → fix` entry together with the fix list. Apply it to `Fixes and quirks` in that OS's setup document (default `~/setup-guides/<os>.md`, or the directory the user named; merge into it; if the section is absent, say so and ask before adding it, per the format rules) once the user confirms the fix worked. That confirmation is the trigger; no second prompt. Note the machine if the fix is machine-specific.
 
 ## Common toolchain symptoms
 
@@ -19,7 +19,7 @@ Each entry: symptom → likely causes (most likely first) → discriminating com
 - **Shim exists but fails** → the version manager has no version installed for this directory → `mise ls`, `mise current`.
 - **Works in a terminal but not in an IDE, cron, or systemd** → non-interactive environment lacks interactive `PATH` additions → compare `echo $PATH` there vs. in the terminal; fix `PATH` in the login-level file.
 - **Permission denied on global install** → global prefix owned by root (e.g. system Node with `npm -g`) → `npm config get prefix`; fix by using a version manager or a user-owned prefix, never `sudo npm -g`.
-- **Install fails with TLS/proxy errors (`ECONNRESET`, certificate errors)** → corporate proxy or custom CA → targeted config queries only: `npm config get registry`, `npm config get proxy`, `npm config get https-proxy`, `git config --get http.proxy`, `pip config debug` is **not** safe if it prints index URLs with credentials, so prefer `pip config get global.index-url` after warning the user it may contain credentials and asking them to redact any `user:pass@` before pasting.
+- **Install fails with TLS/proxy errors (`ECONNRESET`, certificate errors)** → corporate proxy or custom CA → targeted config queries only: `npm config get registry`, and for proxy settings (`npm config get proxy`, `npm config get https-proxy`, `git config --get http.proxy`) ask for the host only or tell the user to redact any `user:pass@` before pasting, since proxy URLs often embed credentials; `pip config debug` is **not** safe if it prints index URLs with credentials, so prefer `pip config get global.index-url` after warning the user it may contain credentials and asking them to redact any `user:pass@` before pasting.
 - **Package manager conflicts / duplicate installs** → the same tool installed by two managers → `which -a`, then inventory each manager.
 - **Homebrew works but a brew tool is the wrong architecture (Apple Silicon)** → Intel brew under `/usr/local` shadowing `/opt/homebrew` → `which -a brew`, `uname -m`, `file $(which <tool>)`.
 

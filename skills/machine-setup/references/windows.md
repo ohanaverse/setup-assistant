@@ -2,6 +2,8 @@
 
 Load when the conversation is about a Windows machine. The harness often runs on another OS, in which case nothing can be executed on the PC: show every command for the user to run themselves, ask them to paste the output, and interpret it. Commands marked **user runs** need an elevated (admin) shell or a UAC prompt. Commands are PowerShell unless noted.
 
+Only the package managers and OS families described here are covered; anything else is a **gap**: state it, never guess commands, and use the gap flow in `SKILL.md`.
+
 ## Detecting the machine
 
 Read-only; offer as one batched list for the user to run and paste back.
@@ -53,4 +55,4 @@ WSL distros are Linux machines: guide them with the Linux reference's knowledge 
 
 ## Recording notes
 
-Inventory for the document: Windows version; `winget list` filtered to what the user installed on purpose, `choco list`, `scoop list`; PowerShell version and `$PROFILE` contents (ask what is customized); WSL distros; execution policy chosen. Ask what was deliberately left out.
+Inventory for the document: Windows version; `winget list` filtered to what the user installed on purpose, `choco list`, `scoop list`; PowerShell version and what `$PROFILE` customizes (ask the user; never print the file); WSL distros; execution policy chosen. Ask what was deliberately left out.
