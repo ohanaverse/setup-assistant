@@ -9,7 +9,7 @@ Only the package managers and OS families described here are covered; anything e
 Read-only; offer as one batched list for the user to run and paste back.
 
 ```
-winver                                                    # GUI: Windows version
+(Get-CimInstance Win32_OperatingSystem) | Select Caption, Version   # Windows version
 $PSVersionTable.PSVersion                                 # PowerShell version
 $env:PROCESSOR_ARCHITECTURE                               # AMD64, ARM64
 Get-CimInstance Win32_ComputerSystem | Select Name, TotalPhysicalMemory

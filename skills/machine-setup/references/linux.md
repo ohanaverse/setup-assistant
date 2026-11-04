@@ -28,10 +28,10 @@ The distro decides the package manager. Only the families below are covered; any
 **dnf** (Fedora, RHEL family)
 - Install `sudo dnf install <pkg>` (**user runs**).
 - Inventory: `dnf list --installed`, `dnf history userinstalled`.
-- Outdated: `dnf check-update`.
+- Outdated: `dnf check-update` (exits with code 100 when updates exist; that is not a failure).
 
 **pacman** (Arch family)
-- Install `sudo pacman -S <pkg>` (**user runs**); inventory `pacman -Qe`; outdated `pacman -Qu`. Never partial-upgrade (`-Sy` then install without `-u`).
+- Install `sudo pacman -S <pkg>` (**user runs**); inventory `pacman -Qe`; outdated `checkupdates` (from pacman-contrib; `pacman -Qu` only reflects the last sync). Never partial-upgrade (`-Sy` then install without `-u`).
 
 **zypper** (openSUSE): install `sudo zypper install <pkg>` (**user runs**); inventory `zypper se --installed-only`; outdated `zypper list-updates`.
 

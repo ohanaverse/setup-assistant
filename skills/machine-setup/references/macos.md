@@ -14,6 +14,7 @@ uname -m                 # arm64 (Apple Silicon) or x86_64 (Intel)
 sysctl hw.memsize        # RAM in bytes
 df -h /                  # storage
 scutil --get ComputerName   # machine name for the document
+hostname                 # fallback source for the name
 echo $SHELL              # login shell (zsh by default)
 ```
 
