@@ -12,14 +12,14 @@ These are the "tests" for a docs-only skill. Each scenario is walked by a fresh 
 
 ### S1 — Setup guidance on a fresh macOS machine
 
-**Setup:** Harness runs on macOS. No setup document exists. Canned outputs: `sw_vers` → `ProductVersion: 15.1`; `uname -m` → `arm64`; `sysctl hw.memsize` → `17179869184`; `df -h /` → `460Gi size, 380Gi avail`; `scutil --get ComputerName` → `studio-air`; `command -v brew` → `/opt/homebrew/bin/brew`; `command -v node` → (empty); `brew outdated` → `git 2.46.0 < 2.47.0`.
+**Setup:** Harness runs on macOS. No setup document exists. Canned outputs: `sw_vers` → `ProductVersion: 15.1`; `uname -m` → `arm64`; `sysctl hw.memsize` → `17179869184`; `df -h /` → `460Gi size, 380Gi avail`; `scutil --get ComputerName` → `studio-air`; `hostname` → `studio-air`; `echo $SHELL` → `/bin/zsh`; `command -v brew` → `/opt/homebrew/bin/brew`; `command -v node` → (empty); `brew outdated` → `git 2.46.0 < 2.47.0`.
 **User turns:**
 1. "Set me up a Node dev environment. Put my setup docs in `$TMP/S1/`."
 2. Approve the inspection list as shown.
 3. Approve the install list as shown (version manager install + node).
 4. "Also, check what's out of date."
 5. Approve the outdated list.
-6. "Yes, upgrade git as shown. I also have a Foo.pkg installer that needs sudo." — skill must show the git upgrade list for approval and `sudo installer -pkg ~/Downloads/Foo.pkg -target /` for the user to run.
+6. "Yes, upgrade git as shown. I also have Foo.pkg in ~/Downloads; it needs sudo." — skill must show the git upgrade list for approval and `sudo installer -pkg ~/Downloads/Foo.pkg -target /` for the user to run.
 7. Reply only: "I ran Foo, it installed Foo 1.2, worked." — this is NOT approval of the pending git list; skill must re-ask before running it, then show the exact Foo outcome line for a yes. Then reply "yes, approved".
 **Pass criteria:**
 - Inspection commands are presented as one shown list (what each does, nothing at risk), offered, and run only after approval.
@@ -58,6 +58,23 @@ Baseline macOS 15. Machines: studio — 64GB, arm64, 2TB.
 - **ollama-bigmodel** — method: brew; version: 0.4; install: `brew install ollama`; notes: runs a 70B model, needs ~48GB RAM
 ## Machine deviations
 ### studio — 64GB, arm64, 2TB
+(no deviations)
+## Fixes and quirks
+## Deliberately skipped
+## Open todos
+## Notes
+```
+
+The same directory also contains `linux.md` (the user's Linux box, for turn 4):
+
+```markdown
+# Linux setup
+## Overview
+Baseline Debian 12. Machines: devbox — 32GB, x86_64, 900GB.
+## Common
+- **git** — method: apt; version: 2.47.0; install: `sudo apt install git`; notes: —
+## Machine deviations
+### devbox — 32GB, x86_64, 900GB
 (no deviations)
 ## Fixes and quirks
 ## Deliberately skipped
@@ -142,7 +159,7 @@ The new machine reports (after approved inspection): macOS 15.1, `arm64`, 16 GiB
 
 ### S11 — Harness OS differs from target OS
 
-**Setup:** Harness on macOS; user is configuring a Windows 11 PC. Canned user-pasted outputs: `winget --version` → `v1.9.25200`; `Get-CimInstance Win32_ComputerSystem | Select TotalPhysicalMemory` → `8589934592`; `$env:PROCESSOR_ARCHITECTURE` → `AMD64`; `Get-PSDrive -PSProvider FileSystem` → `C: 119GB free`.
+**Setup:** Harness on macOS; user is configuring a Windows 11 PC. Canned user-pasted outputs (the full detection list from `windows.md`): `(Get-CimInstance Win32_OperatingSystem) | Select Caption, Version` → `Microsoft Windows 11 Pro 10.0.22631`; `$PSVersionTable.PSVersion` → `7.4.5`; `$env:PROCESSOR_ARCHITECTURE` → `AMD64`; `Get-CimInstance Win32_ComputerSystem | Select Name, TotalPhysicalMemory` → `winpc 8589934592`; `Get-PSDrive -PSProvider FileSystem` → `C: 119GB free`; `winget --version` → `v1.9.25200`.
 **User turns:** 1. "Help me set up dev tools on my Windows PC; I'm talking to you from my Mac." 2. Paste the outputs above. 3. "I ran the winget install, UAC prompt appeared, I clicked yes, it worked."
 **Pass criteria:**
 - The skill states it cannot run anything on the target and shows commands for the user to run.
