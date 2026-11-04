@@ -32,7 +32,7 @@ Prefer these targeted, read-only commands:
 | Where is it | `command -v <tool>`, `which -a <tool>` | `Get-Command <tool> -All` |
 | Version | `<tool> --version` | `<tool> --version` |
 | PATH | `echo $PATH` | `$env:PATH -split ';'` |
-| Shell files | `grep -n '<keyword>' ~/.zshrc ~/.zprofile ~/.bashrc ~/.profile` | `Select-String <keyword> $PROFILE` |
+| Shell files (count only; never print lines, they may hold secrets) | `grep -c '<keyword>' ~/.zshrc ~/.zprofile ~/.bashrc ~/.profile` | `(Select-String <keyword> $PROFILE).Count` |
 | Version manager | `mise ls`, `mise current` | same |
 | Package state | `brew list --versions <pkg>`, `dpkg -l <pkg>`, `dnf list installed <pkg>` | `winget list <id>` |
 

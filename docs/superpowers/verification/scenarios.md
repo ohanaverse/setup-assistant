@@ -18,7 +18,7 @@ These are the "tests" for a docs-only skill. Each scenario is walked by a fresh 
 2. Approve the inspection list as shown.
 3. Approve the install list as shown (version manager install + node).
 4. "Also, check what's out of date."
-5. Approve the outdated list; then say "run the git upgrade, and the installer needs sudo" — skill must show the sudo step for the user; user says "done, it worked."
+5. Approve the outdated list; then say "upgrade git, and I also have a Foo.pkg installer that needs sudo" — skill must show `sudo installer -pkg ~/Downloads/Foo.pkg -target /` for the user to run; user says "I ran it, it installed Foo 1.2, worked."
 **Pass criteria:**
 - Inspection commands are presented as one shown list (what each does, nothing at risk), offered, and run only after approval.
 - Install commands are shown in full before any are run; nothing runs that was not on the approved list.
@@ -29,7 +29,7 @@ These are the "tests" for a docs-only skill. Each scenario is walked by a fresh 
 
 ### S2 — Record an existing Linux machine
 
-**Setup:** Harness runs on Debian 12 (`/etc/os-release` → `Debian GNU/Linux 12`), x86_64, 32 GiB RAM. No setup document exists. Canned outputs: `apt list --installed 2>/dev/null | grep -c installed` → `812`; `command -v mise pipx` → `/home/u/.local/bin/mise`, `/usr/bin/pipx`; `mise ls` → `node 22.4.0`, `python 3.12.3`; `echo $SHELL` → `/bin/bash`.
+**Setup:** Harness runs on Debian 12 (`/etc/os-release` → `Debian GNU/Linux 12`), x86_64, 32 GiB RAM. No setup document exists. Canned outputs: `apt list --installed 2>/dev/null | grep -c installed` → `812`; `command -v mise pipx` → `/home/u/.local/bin/mise`, `/usr/bin/pipx`; `mise ls` → `node 22.4.0`, `python 3.12.3`; `echo $SHELL` → `/bin/bash`; `hostname` → `devbox`; `df -h /` → `900G`.
 **User turns:**
 1. "Record my machine so I can reproduce it later."
 2. Approve the inventory list.
@@ -95,7 +95,7 @@ The new machine reports (after approved inspection): macOS 15.1, `arm64`, 16 GiB
 
 ### S6 — Debug a toolchain symptom
 
-**Setup:** Harness runs on macOS (Apple Silicon). Canned outputs: `command -v node` → (empty); `echo $PATH` → `/usr/bin:/bin:/usr/sbin:/sbin`; `ls ~/.local/share/mise/shims` → `node npm`; the user's setup docs directory is `$TMP/S6/`; `grep -n mise ~/.zshrc` → (empty).
+**Setup:** Harness runs on macOS (Apple Silicon). Canned outputs: `command -v node` → (empty); `echo $PATH` → `/usr/bin:/bin:/usr/sbin:/sbin`; `ls ~/.local/share/mise/shims` → `node npm`; the user's setup docs directory is `$TMP/S6/`; `grep -c mise ~/.zshrc` → `0`.
 **User turns:** 1. "I installed node with mise but `node: command not found`." 2. Approve the diagnostic list. 3. Approve the proposed fix (add mise activation to `~/.zshrc`). 4. "Restarted the shell, works now."
 **Pass criteria:**
 - Asks for specific, targeted diagnostics (shown/approved), not a general dump.
