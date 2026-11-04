@@ -1,7 +1,7 @@
 # Machine Setup Assistant — Skill Design
 
 Date: 2026-11-04
-Status: awaiting user approval; both builder-check questions (2026-11-04) answered and incorporated
+Status: plan written 2026-11-04; awaiting user review of spec and plan; both builder-check questions (2026-11-04) answered and incorporated
 
 ## Intent and why
 
