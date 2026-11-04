@@ -23,6 +23,7 @@
 - Gap flow offers exactly: Address now / File a GitHub issue / Ignore; commit, push, PR each need separate explicit approval; nothing auto-merges; nothing about gaps is written to setup documents; issue drafts contain no secrets, home paths, usernames, or hostname.
 - A fresh session with no memory of the machine must be able to run every flow using only the skill and the setup documents; flows must work conversationally when the harness OS differs from the target OS.
 - Anything the skill writes about a user's machine never goes in this repo.
+- **Harness-agnostic** (user requirement added 2026-11-04): skill files and README name no harness-specific tools, commands, or paths in instructions; they assume only generic capabilities (read files; optionally run shell commands and write files; converse) and degrade to conversational operation. Verified by scenario S17 and a grep in Task 8.
 
 ## Assistant calls recorded here (not in the spec; cheap to override)
 
@@ -184,6 +185,7 @@ Inputs/conditions the spec implies but no spec-listed test covers; each gets a s
 
 - [ ] **Step 1: Rewrite `README.md`**: what the skill is; the one-doc-per-OS model and default `~/setup-guides/` location (outside repo); the trust rule in two sentences; install instructions for Claude Code (copy or symlink `skills/machine-setup` into `~/.claude/skills/`) and a generic note for other skill-capable harnesses; the gap/self-improvement flow in one paragraph.
 - [ ] **Step 2: Cross-reference check**, per file: `for f in README.md skills/machine-setup/SKILL.md skills/machine-setup/references/*.md; do grep -oE '\]\([^)]+\)' "$f" | tr -d '])(' | grep -v '^http' | sed 's/#.*//' | grep -v '^$' | while read t; do test -e "$(dirname "$f")/$t" || echo "BROKEN $f -> $t"; done; done` → no output; `grep -n '](' skills/machine-setup/references/*.md` shows no links to sibling references.
+- [ ] **Step 2b: Harness-agnostic check**: `grep -rniE 'claude|anthropic|bash tool|askuserquestion|slash command|\.claude/' skills README.md` → no instruction-level hits (the only allowed mention is README's install section naming example harnesses, labeled as examples); scenario S17 (added after the user's harness-agnostic requirement) is walked in Task 8 Step 4 with the other scenarios.
 - [ ] **Step 3: Constraint check**: `find . -path ./.git -prune -o \( -name '*.sh' -o -name 'Makefile' -o -name 'tools.json' -o -name 'Brewfile' \) -print` → no output; `grep -rn 'setup-guides' skills | grep -v '~/setup-guides'` → no output (always home-relative, never repo-relative); `git ls-files | grep -E '(^|/)(macos|linux|windows)\.md$' | grep -v 'skills/machine-setup/references/'` → no output (no setup documents in the repo).
-- [ ] **Step 4: Full walkthrough**: simulate-only fresh subagents walk all S1–S16 against the finished skill (parallel); write final `results.md` with each PASS/FAIL and notes; fix and re-walk any FAIL.
+- [ ] **Step 4: Full walkthrough**: simulate-only fresh subagents walk all S1–S17 against the finished skill (parallel); write final `results.md` with each PASS/FAIL and notes; fix and re-walk any FAIL.
 - [ ] **Step 5: Commit**: `git add README.md docs/superpowers/verification && git status --short && git diff --cached --stat && git commit -m "docs: README and verification results"`. Do **not** push or open a PR; report `results.md` to the user for judgment.

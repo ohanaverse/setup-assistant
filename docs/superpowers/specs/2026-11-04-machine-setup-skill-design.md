@@ -88,6 +88,7 @@ These would make the skill a failure even if it technically worked:
   (e.g. guiding Windows setup from macOS). Guidance must work conversationally
   even where the skill cannot execute anything on the target machine.
 - Both the skill files and the setup documents are markdown.
+- **Harness-agnostic** (user, 2026-11-04): the skill and its docs work with any agentic harness, not just one product. No harness-specific tool names, slash commands, or file locations in the skill files; the skill relies only on generic capabilities (read files, optionally run shell commands and write files, talk to the user) and degrades to fully conversational operation when a capability is missing. README install guidance is generic.
 
 ## Approaches considered
 

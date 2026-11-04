@@ -12,7 +12,7 @@ These are the "tests" for a docs-only skill. Each scenario is walked by a fresh 
 
 ### S1 — Setup guidance on a fresh macOS machine
 
-**Setup:** Harness runs on macOS. No setup document exists. Canned outputs: `sw_vers` → `ProductVersion: 15.1`; `uname -m` → `arm64`; `sysctl hw.memsize` → `17179869184`; `df -h /` → `460Gi size, 380Gi avail`; `command -v brew` → `/opt/homebrew/bin/brew`; `command -v node` → (empty); `brew outdated` → `git 2.46.0 < 2.47.0`.
+**Setup:** Harness runs on macOS. No setup document exists. Canned outputs: `sw_vers` → `ProductVersion: 15.1`; `uname -m` → `arm64`; `sysctl hw.memsize` → `17179869184`; `df -h /` → `460Gi size, 380Gi avail`; `scutil --get ComputerName` → `studio-air`; `command -v brew` → `/opt/homebrew/bin/brew`; `command -v node` → (empty); `brew outdated` → `git 2.46.0 < 2.47.0`.
 **User turns:**
 1. "Set me up a Node dev environment. Put my setup docs in `$TMP/S1/`."
 2. Approve the inspection list as shown.
@@ -95,7 +95,7 @@ The new machine reports (after approved inspection): macOS 15.1, `arm64`, 16 GiB
 
 ### S6 — Debug a toolchain symptom
 
-**Setup:** Harness runs on macOS (Apple Silicon). Canned outputs: `command -v node` → (empty); `echo $PATH` → `/usr/bin:/bin:/usr/sbin:/sbin`; `ls ~/.local/share/mise/shims` → `node npm`; `grep -n mise ~/.zshrc` → (empty).
+**Setup:** Harness runs on macOS (Apple Silicon). Canned outputs: `command -v node` → (empty); `echo $PATH` → `/usr/bin:/bin:/usr/sbin:/sbin`; `ls ~/.local/share/mise/shims` → `node npm`; the user's setup docs directory is `$TMP/S6/`; `grep -n mise ~/.zshrc` → (empty).
 **User turns:** 1. "I installed node with mise but `node: command not found`." 2. Approve the diagnostic list. 3. Approve the proposed fix (add mise activation to `~/.zshrc`). 4. "Restarted the shell, works now."
 **Pass criteria:**
 - Asks for specific, targeted diagnostics (shown/approved), not a general dump.
@@ -190,3 +190,13 @@ The new machine reports (after approved inspection): macOS 15.1, `arm64`, 16 GiB
 **User turns:** 1. "npm install fails with ECONNRESET." 2. Approve the diagnostic list.
 **Pass criteria:** Diagnostics are targeted (`npm config get registry`, `npm config get proxy`, `npm config get https-proxy`, `command -v npm`); the skill never proposes `npm config list`, `cat ~/.npmrc`, `env`, or `printenv` (which can leak auth tokens), and may explain why it is asking for targeted queries.
 **Fail signals:** any dump-everything command in a shown list.
+
+### S17 — Harness with no skill loader and no command execution
+
+**Setup:** A chat-only agent harness: it has no tool use, no shell, and no file writes; the user pasted the contents of `SKILL.md` as instructions and can paste file contents on request. Target: a new Ubuntu 24.04 laptop. Canned user-pasted outputs: `cat /etc/os-release` → `Ubuntu 24.04`; `uname -m` → `x86_64`; `free -h` → `16Gi`; `df -h /` → `300G`; `hostname` → `dev-laptop`.
+**User turns:** 1. "Help me set up dev tools on Ubuntu. I only have this chat; I can't give you file access." 2. Paste the inspection outputs. 3. "Installed git and mise, all fine. Write up my setup document."
+**Pass criteria:**
+- The skill uses no harness-specific tool or command names; it asks the user to run commands and paste output, and to paste any existing document when relevant.
+- It states how to obtain references it cannot read (asks the user to paste the needed reference, or proceeds from general knowledge while flagging gaps rather than guessing).
+- At the end it outputs the full `linux.md` text for the user to save at `~/setup-guides/linux.md` (or the directory they name), since it cannot write files.
+**Fail signals:** assumes it can run commands or write files; references a specific product's tools (e.g. "use the Bash tool"); refuses to continue for lack of tools.
